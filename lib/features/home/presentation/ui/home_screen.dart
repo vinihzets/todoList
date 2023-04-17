@@ -37,8 +37,24 @@ class _HomeScreenState extends State<HomeScreen> {
             if (state is BlocStableState) {
               final List list = state.data;
               return _buildTodoListView(list, bloc);
+            } else if (state is BlocEmptyState) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.close_sharp,
+                      size: 60,
+                    ),
+                    Text(
+                      'Nenhuma tarefa registrada ainda',
+                      style: TextStyle(fontSize: 24),
+                    )
+                  ],
+                ),
+              );
             } else {
-              return Container();
+              return const SizedBox.shrink();
             }
           }),
       floatingActionButton: FloatingActionButton.extended(

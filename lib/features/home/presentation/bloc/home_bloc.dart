@@ -69,9 +69,12 @@ class HomeBloc with HudMixins {
     getRequest.fold((left) {
       dispatchState(BlocErrorState(message: left.message));
     }, (right) {
-      inspect(right);
-      if (right.isNotEmpty) {
+      _cache = right;
+
+      if (_cache.isNotEmpty) {
         dispatchState(BlocStableState(data: right));
+      } else if (_cache.isEmpty) {
+        dispatchState(BlocEmptyState());
       }
     });
   }
@@ -88,9 +91,5 @@ class HomeBloc with HudMixins {
         dispatchState(BlocEmptyState());
       }
     });
-  }
-
-  modifyToDo(List todo) {
-    // _todoList.where((element) => todo);
   }
 }
