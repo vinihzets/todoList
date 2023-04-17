@@ -93,19 +93,33 @@ _buildNewTodoDialog(
       builder: (context) {
         return Dialog(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                 width: 150,
                 child: TextField(
                   controller: controller,
+                  decoration: const InputDecoration(
+                      hintText: 'Sua nova tarefa',
+                      hintStyle: TextStyle(color: Colors.white)),
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    bloc.dispatchEvent(
-                        HomeEventAddTodo(context, controller.text));
-                  },
-                  child: Text('Adicionar Nova Tarefa'))
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ElevatedButton(
+                    style: const ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.white)),
+                    onPressed: () {
+                      bloc.dispatchEvent(
+                          HomeEventAddTodo(context, controller.text));
+                      controller.text = '';
+                    },
+                    child: const Text(
+                      'Adicionar Nova Tarefa',
+                      style: TextStyle(color: Colors.black),
+                    )),
+              )
             ],
           ),
         );
