@@ -21,3 +21,7 @@ class BlocErrorState extends BlocState {
 class BlocLoadingState extends BlocState {
   BlocLoadingState({super.data});
 }
+
+class BlocEmptyState extends BlocState {
+  BlocEmptyState({super.data});
+}
