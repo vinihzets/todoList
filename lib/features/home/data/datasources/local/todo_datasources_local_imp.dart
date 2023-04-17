@@ -22,7 +22,6 @@ class TodoDataSourcesLocalImp implements TodoDataSources {
   Future<Either<Failure, List>> removeToDo(int hashCode) async {
     try {
       todoList.removeWhere((item) => item.hashCode == hashCode);
-      inspect(todoList);
 
       return Right(todoList);
     } on Failure catch (e) {

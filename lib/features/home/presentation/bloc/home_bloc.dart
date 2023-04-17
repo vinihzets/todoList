@@ -59,6 +59,7 @@ class HomeBloc with HudMixins {
     addRequest.fold((left) {
       dispatchState(BlocErrorState(message: left.message));
     }, (right) {
+      navigatePop(context);
       dispatchState(BlocStableState(data: right));
     });
   }
