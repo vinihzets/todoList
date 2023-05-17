@@ -60,6 +60,7 @@ class HomeBloc with HudMixins {
       dispatchState(BlocErrorState(message: left.message));
     }, (right) {
       navigatePop(context);
+      
       dispatchState(BlocStableState(data: right));
     });
   }

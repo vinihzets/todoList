@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:todolist/core/failure/failure.dart';
 import 'package:either_dart/src/either.dart';
 import 'package:todolist/features/home/data/datasources/todo_datasources.dart';
@@ -10,7 +8,7 @@ class TodoDataSourcesLocalImp implements TodoDataSources {
   @override
   Future<Either<Failure, List>> addToDo(String todo) async {
     try {
-      final addToList = todoList.add(todo);
+      todoList.add(todo);
 
       return Right(todoList);
     } on Failure catch (e) {

@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:todolist/core/architeture/bloc_screen_builder.dart';
-import 'package:todolist/core/architeture/bloc_state.dart';
+import 'package:todolist/core/components/bloc_screen_builder.dart';
 import 'package:todolist/features/home/presentation/bloc/home_bloc.dart';
 import 'package:todolist/features/home/presentation/bloc/home_event.dart';
 
@@ -33,30 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: BlocScreenBuilder(
           stream: bloc.state,
-          builder: (state) {
-            if (state is BlocStableState) {
-              final List list = state.data;
-              return _buildTodoListView(list, bloc);
-            } else if (state is BlocEmptyState) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.close_sharp,
-                      size: 60,
-                    ),
-                    Text(
-                      'Nenhuma tarefa registrada ainda',
-                      style: TextStyle(fontSize: 24),
-                    )
-                  ],
-                ),
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
+          onStable: (onStable) => _buildTodoListView(onStable.data, bloc),
+          onEmpty: (onEmpty) => _buildEmptyState(),
+          onError: (onError) => Column(),
+          onLoading: (onLoading) => const CircularProgressIndicator(),
+          ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           _buildNewTodoDialog(context, bloc, todoController);
@@ -67,15 +45,39 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+_buildEmptyState() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Icon(
+          Icons.close_sharp,
+          size: 60,
+        ),
+        Text(
+          'Nenhuma tarefa registrada ainda',
+          style: TextStyle(fontSize: 24),
+        )
+      ],
+    ),
+  );
+}
+
 _buildTodoListView(List list, HomeBloc bloc) {
   return ListView.separated(
       itemBuilder: (context, index) {
         return Column(
           children: list
               .map((e) => ListTile(
-                    leading: Text(e),
-                    onTap: () =>
-                        bloc.dispatchEvent(HomeEventRemoveTodo(e.hashCode)),
+                    leading: const Icon(Icons.book_sharp),
+                    title: Text(e),
+                    trailing: IconButton(
+                        onPressed: () =>
+                            bloc.dispatchEvent(HomeEventRemoveTodo(e.hashCode)),
+                        icon: const Icon(
+                          Icons.close_sharp,
+                          color: Colors.red,
+                        )),
                   ))
               .toList(),
         );
